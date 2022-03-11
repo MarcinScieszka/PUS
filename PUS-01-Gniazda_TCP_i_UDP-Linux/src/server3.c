@@ -1,8 +1,6 @@
 /*
- * Data:                2009-02-10
- * Autor:               Jakub Gasior <quebes@mars.iti.pk.edu.pl>
- * Kompilacja:          $ gcc server2.c -o server2
- * Uruchamianie:        $ ./server2 <numer portu>
+ * Kompilacja:          $ gcc server3.c libpalindrome.c -o server3
+ * Uruchamianie:        $ ./server3 <numer portu>
  */
 
 #include <stdio.h>
@@ -64,12 +62,12 @@ int main(int argc, char **argv)
         perror("bind()");
         exit(EXIT_FAILURE);
     }
-    
+
     client_addr_len = sizeof(client_addr);
 
     while (1)
     {
-        fprintf(stdout, "Server is listening for incoming connection...\n");
+        fprintf(stdout, "\nServer is listening for incoming connection...\n");
 
         /* Oczekiwanie na dane od klienta: */
         retval = recvfrom(
@@ -77,54 +75,55 @@ int main(int argc, char **argv)
             buff, sizeof(buff),
             0,
             (struct sockaddr *)&client_addr, &client_addr_len);
+
         if (retval == -1)
         {
             perror("recvfrom()");
             exit(EXIT_FAILURE);
         }
-        
-        //Diagram UDP bez danych - serwer kończy działanie
-        if (retval == 0)
+
+        // Diagram UDP bez danych - serwer kończy działanie
+        if (buff[0] == '\n')
         {
             break;
         }
-        
+
         // serwer wypisuje adres i numer portu klienta
         fprintf(stdout, "UDP datagram received. Client address: %s, port number: %d\n",
                 inet_ntop(AF_INET, &client_addr.sin_addr, addr_buff, sizeof(addr_buff)),
                 ntohs(client_addr.sin_port));
 
-        sleep(4);
-
         // serwer sprawdza, czy otrzymany ciąg znaków można traktować jako liczbę całkowitą
         int is_digit = 1;
         for (int i = 0; i < strlen(buff); i++)
         {
-            if (isspace(buff[i]) == 0) 
+            if (isspace(buff[i]) == 0)
             {
-                if (isdigit(buff[i]) == 0) 
+                if (isdigit(buff[i]) == 0)
                 {
-                    printf("x %c\n", buff[i]);
                     is_digit = 0;
                     break;
                 }
             }
         }
-    
+
         // Jeżeli ciąg znaków można traktować jako liczbę całkowitą, to serwer sprawdza czy liczba jest palindromem
-        if(is_digit)
+        if (is_digit)
         {
-            if(is_palindrome(buff, retval) == 1) {
-                strcpy(buff, "Otrzymane dane są palindromem liczbowym.\n");
+            buff[strlen(buff)] = '\0';
+
+            if (is_palindrome(buff, strlen(buff)) == 1)
+            {
+                strcpy(buff, "Otrzymane dane są palindromem liczbowym.");
             }
             else
             {
-                strcpy(buff, "Otrzymane dane nie są palindromem liczbowym.\n");
+                strcpy(buff, "Otrzymane dane nie są palindromem liczbowym.");
             }
         }
         else
         {
-            strcpy(buff, "Otrzymany ciąg znaków nie można traktować jako liczbę całkowitą.\n");
+            strcpy(buff, "Otrzymany ciąg znaków nie można traktować jako liczbę całkowitą.");
         }
 
         //  serwer przesyła odpowiedź do klienta
@@ -138,8 +137,10 @@ int main(int argc, char **argv)
             perror("sendto()");
             exit(EXIT_FAILURE);
         }
+
+        buff[0] = '\0';
     }
-    
+
     close(sockfd);
 
     exit(EXIT_SUCCESS);
