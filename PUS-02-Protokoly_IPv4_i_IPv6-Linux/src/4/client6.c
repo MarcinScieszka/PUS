@@ -11,12 +11,6 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
-// Uruchomiony klient IPv6 wywołuje funkcje gethostbyname, żądając jedynie adresów IPv6 (ustawia opcje RES_USE_INET6). 
-// Ponieważ stacja serwera obsługującego wyłącznie protokół IPv4 utrzymuje tylko rekordy A, 
-// wiec do klienta będzie przekazany adres IPv6 utworzony z przekształconego adresu IPv4.
-// Klient IPv6 wywołuje funkcje connect. 
-// Wewnątrz struktury adresowej gniazda IPv6 klient przekazuje adres IPv6 utworzony z przekształconego adresu IPv4. 
-
 int main(int argc, char **argv)
 {   
     struct sockaddr_in6 remote_addr; // gniazdowa struktura adresowa serwera dla IPv6
