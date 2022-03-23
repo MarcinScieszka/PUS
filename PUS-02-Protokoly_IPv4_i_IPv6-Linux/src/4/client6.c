@@ -13,7 +13,7 @@
 
 int main(int argc, char **argv)
 {   
-    struct sockaddr_in6 remote_addr; // gniazdowa struktura adresowa serwera dla IPv6
+    struct sockaddr_in6 remote_addr; // gniazdowa struktura adresowa dla IPv6
     socklen_t remote_addr_len; // rozmiar struktury adresowej w bajtach
     int sockfd; // deskryptor gniazda
     int retval; // wartosc zwracana przez funkcje
