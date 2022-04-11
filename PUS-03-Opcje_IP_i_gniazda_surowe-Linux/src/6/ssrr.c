@@ -12,22 +12,22 @@
 #include <time.h>
 #include "checksum.h"
 
-int main(int argc, char** argv) {
-
+int main(int argc, char **argv)
+{
     /* Naglowek ICMP: */
-    struct icmphdr          icmp_header = {0};
+    struct icmphdr icmp_header = {0};
 
     /* Struktura zawierajaca wskazowki dla funkcji getaddrinfo(): */
-    struct addrinfo         hints;
+    struct addrinfo hints;
 
     /*
      * Wskaznik na liste zwracana przez getaddrinfo() oraz wskaznik uzywany do
      * poruszania sie po elementach listy:
      */
-    struct addrinfo         *rp, *result;
+    struct addrinfo *rp, *result;
 
-    int                     sockfd; /* Deskryptor gniazda. */
-    int                     retval; /* Wartosc zwracana przez funkcje. */
+    int sockfd; /* Deskryptor gniazda. */
+    int retval; /* Wartosc zwracana przez funkcje. */
 
     /*
      * Opcje IP:
@@ -35,49 +35,53 @@ int main(int argc, char** argv) {
     unsigned char ip_options[16] = {
         1, 0x89, 15, 4,
         192,0,2,1,
-        195,136,186,1,
-        213,172,178,41
-    };
+        172,21,128, 0,
+        99,84,125,28};
 
-    if (argc != 2) {
+    if (argc != 2)
+    {
         fprintf(stderr, "Invocation: %s <HOSTNAME OR IP ADDRESS>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
     /* Wskazowki dla getaddrinfo(): */
     memset(&hints, 0, sizeof(struct addrinfo));
-    hints.ai_family         =       AF_INET; /* Domena komunikacyjna (IPv4). */
-    hints.ai_socktype       =       SOCK_RAW; /* Typ gniazda. */
-    hints.ai_protocol       =       IPPROTO_ICMP; /* Protokol. */
-
+    hints.ai_family = AF_INET;        /* Domena komunikacyjna (IPv4). */
+    hints.ai_socktype = SOCK_RAW;     /* Typ gniazda. */
+    hints.ai_protocol = IPPROTO_ICMP; /* Protokol. */
 
     /* Pierwszy argument to adres IP lub nazwa domenowa: */
     retval = getaddrinfo(argv[1], NULL, &hints, &result);
-    if (retval != 0) {
+    if (retval != 0)
+    {
         fprintf(stderr, "getaddrinfo(): %s\n", gai_strerror(retval));
         exit(EXIT_FAILURE);
     }
 
     /* Przechodzimy kolejno przez elementy listy: */
-    for (rp = result; rp != NULL; rp = rp->ai_next) {
+    for (rp = result; rp != NULL; rp = rp->ai_next)
+    {
 
         /* Utworzenie gniazda dla protokolu ICMP: */
         sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-        if (sockfd == -1) {
+        if (sockfd == -1)
+        {
             perror("socket()");
             continue;
         }
 
         /* Ustawienie opcji IP: */
         retval = setsockopt(
-                     sockfd, IPPROTO_IP, IP_OPTIONS,
-                     (void*)ip_options, sizeof(ip_options)
-                 );
+            sockfd, IPPROTO_IP, IP_OPTIONS,
+            (void *)ip_options, sizeof(ip_options));
 
-        if (retval == -1) {
+        if (retval == -1)
+        {
             perror("setsockopt()");
             exit(EXIT_FAILURE);
-        } else {
+        }
+        else
+        {
             /* Jezeli gniazdo zostalo poprawnie utworzone i
              * opcje IP ustawione: */
             break;
@@ -85,7 +89,8 @@ int main(int argc, char** argv) {
     }
 
     /* Jezeli lista jest pusta (nie utworzono gniazda): */
-    if (rp == NULL) {
+    if (rp == NULL)
+    {
         fprintf(stderr, "Client failure: could not create socket.\n");
         exit(EXIT_FAILURE);
     }
@@ -93,29 +98,28 @@ int main(int argc, char** argv) {
     /* Wypelnienie pol naglowka ICMP Echo: */
     srand(time(NULL));
     /* Typ komunikatu: */
-    icmp_header.type                =       ICMP_ECHO;
+    icmp_header.type = ICMP_ECHO;
     /* Kod komunikatu: */
-    icmp_header.code                =       0;
+    icmp_header.code = 0;
     /* Identyfikator: */
-    icmp_header.un.echo.id          =       htons(getpid());
+    icmp_header.un.echo.id = htons(getpid());
     /* Numer sekwencyjny: */
-    icmp_header.un.echo.sequence    =       htons((unsigned short)rand());
+    icmp_header.un.echo.sequence = htons((unsigned short)rand());
     /* Suma kontrolna (plik checksum.h): */
-    icmp_header.checksum            =       internet_checksum(
-                                                (unsigned short *)&icmp_header,
-                                                sizeof(icmp_header)
-                                            );
+    icmp_header.checksum = internet_checksum(
+        (unsigned short *)&icmp_header,
+        sizeof(icmp_header));
 
     fprintf(stdout, "Sending ICMP Echo...\n");
     /* Wyslanie komunikatu ICMP Echo: */
     retval = sendto(
-                 sockfd,
-                 &icmp_header, sizeof(icmp_header),
-                 0,
-                 rp->ai_addr, rp->ai_addrlen
-             );
+        sockfd,
+        &icmp_header, sizeof(icmp_header),
+        0,
+        rp->ai_addr, rp->ai_addrlen);
 
-    if (retval == -1) {
+    if (retval == -1)
+    {
         perror("sentdo()");
     }
 
