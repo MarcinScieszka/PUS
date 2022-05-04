@@ -8,56 +8,65 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
 
-    int                     sockfd; /* Deskryptor gniazda */
-    int                     retval;
-    int                     len, prev_len;
-    char                    *buff, *ptr;
-    char                    address[INET_ADDRSTRLEN];
-    struct ifconf           ifc;
-    struct ifreq            *ifreqptr, ifreqstruct;
+    int sockfd; /* Deskryptor gniazda */
+    int retval;
+    int len, prev_len;
+    char *buff, *ptr;
+    char address[INET_ADDRSTRLEN];
+    struct ifconf ifc;
+    struct ifreq *ifreqptr, ifreqstruct;
 
-    if (argc != 1) {
+    if (argc != 1)
+    {
         fprintf(stderr, "Invocation: %s\n", argv[0]);
     }
 
     /* Deskryptor gniazda bedzie potrzebny w wywolaniu funkcji ioctl(). */
     sockfd = socket(PF_INET, SOCK_DGRAM, 0);
-    if (sockfd == -1) {
+    if (sockfd == -1)
+    {
         perror("socket()");
         exit(EXIT_FAILURE);
     }
 
-    prev_len        =       0;
+    prev_len = 0;
     /* Poczatkowy rozmiar bufora dla ioctl(): */
-    len             =       20 * sizeof(struct ifreq);
+    len = 20 * sizeof(struct ifreq);
 
     /*
      * Petla wykonuje sie dopoki rozmiar zwroconej tablicy struktur
      * miedzy dwoma kolejnymi wywolaniami nie ulegnie zmiane.
      * Zakonczenie petli bedzie oznaczac ze tablica nie zostala przycieta.
      */
-    for (;;) {
+    for (;;)
+    {
 
-        buff = (char*)malloc(sizeof(char) * len);
-        if (buff == NULL) {
+        buff = (char *)malloc(sizeof(char) * len);
+        if (buff == NULL)
+        {
             fprintf(stderr, "malloc() failed!\n");
             break;
         }
 
-        ifc.ifc_len     =       len;
-        ifc.ifc_buf     =       buff;
+        ifc.ifc_len = len;
+        ifc.ifc_buf = buff;
 
         /* Pobranie informacji konfiguracyjnych na temat interfejsow: */
         retval = ioctl(sockfd, SIOCGIFCONF, &ifc);
 
-        if (retval == -1) {
+        if (retval == -1)
+        {
             /* W przypadku bledu: */
             perror("ioctl()");
             exit(EXIT_FAILURE);
-        } else {
-            if (ifc.ifc_len == prev_len) {
+        }
+        else
+        {
+            if (ifc.ifc_len == prev_len)
+            {
                 /*
                  * Za 2 razem rozmiar nie ulegl zmianie.
                  * Jestesmy pewni, ze bufor jest wystarczajaco duzy i
@@ -76,7 +85,8 @@ int main(int argc, char** argv) {
         len += 10 * sizeof(struct ifreq);
     }
 
-    for (ptr = buff; ptr < buff + ifc.ifc_len; ptr += sizeof(struct ifreq)) {
+    for (ptr = buff; ptr < buff + ifc.ifc_len; ptr += sizeof(struct ifreq))
+    {
         ifreqptr = (struct ifreq *)ptr;
 
         /*
@@ -92,7 +102,8 @@ int main(int argc, char** argv) {
          */
 
         /*  Tylko IPv4: */
-        if (ifreqptr->ifr_addr.sa_family != AF_INET) {
+        if (ifreqptr->ifr_addr.sa_family != AF_INET)
+        {
             continue;
         }
 
@@ -105,7 +116,8 @@ int main(int argc, char** argv) {
         ifreqstruct = *ifreqptr;
         /* Pobranie flag: */
         retval = ioctl(sockfd, SIOCGIFFLAGS, &ifreqstruct);
-        if (retval == -1) {
+        if (retval == -1)
+        {
             perror("ioctl()");
             exit(EXIT_FAILURE);
         }
@@ -114,22 +126,21 @@ int main(int argc, char** argv) {
             stdout,
             "<%s %s>",
             (ifreqstruct.ifr_flags & IFF_UP) ? "UP" : "DOWN",
-            (ifreqstruct.ifr_flags & IFF_PROMISC) ? "PROMISC" : "NO-PROMISC"
-        );
+            (ifreqstruct.ifr_flags & IFF_PROMISC) ? "PROMISC" : "NO-PROMISC");
 
         /* Konwersja adresu IP do postaci czytelnej dla czlowieka: */
         inet_ntop(
             AF_INET,
-            &((struct sockaddr_in*)&ifreqptr->ifr_addr)->sin_addr.s_addr,
+            &((struct sockaddr_in *)&ifreqptr->ifr_addr)->sin_addr.s_addr,
             address,
-            INET_ADDRSTRLEN
-        );
+            INET_ADDRSTRLEN);
 
         fprintf(stdout, "\n           address: %s, ", address);
 
         /* Pobranie maski: */
         retval = ioctl(sockfd, SIOCGIFNETMASK, &ifreqstruct);
-        if (retval == -1) {
+        if (retval == -1)
+        {
             perror("ioctl()");
             exit(EXIT_FAILURE);
         }
@@ -137,10 +148,9 @@ int main(int argc, char** argv) {
         /* Konwersja maski do postaci czytelnej dla czlowieka: */
         inet_ntop(
             AF_INET,
-            &((struct sockaddr_in*)&(ifreqstruct.ifr_addr))->sin_addr.s_addr,
+            &((struct sockaddr_in *)&(ifreqstruct.ifr_addr))->sin_addr.s_addr,
             address,
-            INET_ADDRSTRLEN
-        );
+            INET_ADDRSTRLEN);
 
         fprintf(stdout, "netmask: %s\n", address);
     }
