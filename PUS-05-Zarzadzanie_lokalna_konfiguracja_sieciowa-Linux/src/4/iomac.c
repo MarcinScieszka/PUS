@@ -13,7 +13,7 @@
 
 int main(int argc, char **argv)
 {
-    int sockfd, retval;
+    int retval;
     struct arpreq request;
     struct ifreq st, st1;
 
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
 
-    // get and print current ipv6 addres
+    // get and print current MAC addres
     strcpy(st.ifr_name, argv[1]);
     if (0 == ioctl(fd, SIOCGIFHWADDR, &st))
     {
