@@ -1,0 +1,36 @@
+Running as user "root" and group "root". This could be dangerous.
+Capturing on 'Loopback: lo'
+33 packets captured
+    1 0.000000000    127.0.0.1 → 127.0.1.1    TCP 74 45518 → 22 [SYN] Seq=0 Win=65495 Len=0 MSS=65495 SACK_PERM=1 TSval=2131852161 TSecr=0 WS=128
+    2 0.000017323    127.0.1.1 → 127.0.0.1    TCP 74 22 → 45518 [SYN, ACK] Seq=0 Ack=1 Win=65483 Len=0 MSS=65495 SACK_PERM=1 TSval=894757504 TSecr=2131852161 WS=128
+    3 0.000029385    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=1 Ack=1 Win=65536 Len=0 TSval=2131852161 TSecr=894757504
+    4 0.000155802    127.0.0.1 → 127.0.1.1    SSH 89 Client: Protocol (SSH-2.0-libssh2_1.8.0)
+    5 0.000163597    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=1 Ack=24 Win=65536 Len=0 TSval=894757504 TSecr=2131852161
+    6 0.005807738    127.0.1.1 → 127.0.0.1    SSHv2 107 Server: Protocol (SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.5)
+    7 0.005818708    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=24 Ack=42 Win=65536 Len=0 TSval=2131852166 TSecr=894757509
+    8 0.006904664    127.0.0.1 → 127.0.1.1    SSHv2 810 Client: Key Exchange Init
+    9 0.006934760    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=42 Ack=768 Win=64896 Len=0 TSval=894757511 TSecr=2131852167
+   10 0.007206279    127.0.1.1 → 127.0.0.1    SSHv2 1122 Server: Key Exchange Init
+   11 0.007214795    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=768 Ack=1098 Win=64512 Len=0 TSval=2131852168 TSecr=894757511
+   12 0.007317227    127.0.0.1 → 127.0.1.1    SSHv2 90 Client: Diffie-Hellman Group Exchange Request
+   13 0.007349989    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=1098 Ack=792 Win=64896 Len=0 TSval=894757511 TSecr=2131852168
+   14 0.010584703    127.0.1.1 → 127.0.0.1    SSHv2 346 Server: Diffie-Hellman Group Exchange Group
+   15 0.010619889    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=792 Ack=1378 Win=65280 Len=0 TSval=2131852171 TSecr=894757514
+   16 0.016345413    127.0.0.1 → 127.0.1.1    SSHv2 338 Client: Diffie-Hellman Group Exchange Init
+   17 0.016379547    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=1378 Ack=1064 Win=65280 Len=0 TSval=894757520 TSecr=2131852177
+   18 0.020381088    127.0.1.1 → 127.0.0.1    SSHv2 1170 Server: Diffie-Hellman Group Exchange Reply, New Keys
+   19 0.020417987    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=1064 Ack=2482 Win=64512 Len=0 TSval=2131852181 TSecr=894757524
+   20 0.027340785    127.0.0.1 → 127.0.1.1    SSHv2 82 Client: New Keys
+   21 0.027370671    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=2482 Ack=1080 Win=65536 Len=0 TSval=894757531 TSecr=2131852188
+   22 0.027544457    127.0.0.1 → 127.0.1.1    SSHv2 130 Client: Encrypted packet (len=64)
+   23 0.027547483    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=2482 Ack=1144 Win=65536 Len=0 TSval=894757531 TSecr=2131852188
+   24 0.027648943    127.0.1.1 → 127.0.0.1    SSHv2 130 Server: Encrypted packet (len=64)
+   25 0.027659603    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=1144 Ack=2546 Win=65536 Len=0 TSval=2131852188 TSecr=894757531
+   26 1.527981397    127.0.0.1 → 127.0.1.1    SSHv2 146 Client: Encrypted packet (len=80)
+   27 1.528029508    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [ACK] Seq=2546 Ack=1224 Win=65536 Len=0 TSval=894759032 TSecr=2131853689
+   28 1.534894748    127.0.1.1 → 127.0.0.1    SSHv2 146 Server: Encrypted packet (len=80)
+   29 1.534903865    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=1224 Ack=2626 Win=65536 Len=0 TSval=2131853695 TSecr=894759038
+   30 1.535055519    127.0.0.1 → 127.0.1.1    SSHv2 146 Client: Encrypted packet (len=80)
+   31 1.535086056    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [FIN, ACK] Seq=1304 Ack=2626 Win=65536 Len=0 TSval=2131853696 TSecr=894759038
+   32 1.536234850    127.0.1.1 → 127.0.0.1    TCP 66 22 → 45518 [FIN, ACK] Seq=2626 Ack=1305 Win=65536 Len=0 TSval=894759040 TSecr=2131853696
+   33 1.536249658    127.0.0.1 → 127.0.1.1    TCP 66 45518 → 22 [ACK] Seq=1305 Ack=2627 Win=65536 Len=0 TSval=2131853697 TSecr=894759040
