@@ -1,0 +1,13 @@
+[Unit]
+Description=Demoniczny PUS
+After=network.target pus_sock.socket
+Requires=pus_sock.socket
+
+[Service]
+User=nkg
+WorkingDirectory=/tmp/pus/
+ExecStart=/tmp/pus/tcp_server_sock
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

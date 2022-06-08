@@ -1,0 +1,9 @@
+[Unit]
+Description=PUS Socket
+PartOf=pus_sock.service
+
+[Socket]
+ListenStream=3301
+
+[Install]
+WantedBy=sockets.target

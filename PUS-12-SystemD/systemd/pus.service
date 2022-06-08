@@ -1,0 +1,11 @@
+[Unit]
+Description=Demoniczny PUS
+
+[Service]
+User=nkg
+WorkingDirectory=/tmp/pus/
+ExecStart=/tmp/pus/tcp_server 3300
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
