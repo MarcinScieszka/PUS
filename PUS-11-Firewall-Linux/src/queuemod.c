@@ -229,14 +229,11 @@ static u_int32_t print_packet(struct nfq_data *tb, int *packet_size, unsigned ch
    icmph->checksum = 0;
    printf("checksum reset: icmph->checksum: %d\n", icmph->checksum);
  
-   // // obliczenie sumy kontrolnej komunikatu ICMP
-   // // konieczne po modyfikacji pola danych komunikatu
-   // // parametry: wskaźnik na początek komunikatu ICMP, rozmiar komunikatu (nagłówek + dane)
+   // obliczenie sumy kontrolnej komunikatu ICMP
+   // konieczne po modyfikacji pola danych komunikatu
+   // parametry: wskaźnik na początek komunikatu ICMP, rozmiar komunikatu (nagłówek + dane)
    icmph->checksum = internet_checksum(data, *packet_size);
    printf("after swap_bytes(): icmph->checksum: %d\n", icmph->checksum);
  
    return id;
 }
- 
- 
-
